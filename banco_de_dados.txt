@@ -1,0 +1,32 @@
+whitelist 1 
+blacklist 0
+
+
+
+Tabelas:
+message_filter: contem as infos sobre white e blacklist das contas e join com
+a tabela account
+message_filter_category: tabela que contem join com a message_filter
+
+
+
+
+
+
+Consultas:
+SELECT acco_alias,msms_scheduled, msms_full_body, fsms_operation, fsms_username 
+FROM filtered_message_sms_history 
+WHERE fsms_operation = 'BLOCK'
+AND msms_scheduled >= '2019-08-19' 
+AND acco_alias LIKE 'usmatrix.smpp'
+OR acco_alias LIKE 'sybase.smpp'
+OR acco_alias LIKE 'mitto.smpp'
+OR acco_alias LIKE 'BFTdisparo1';
+
+Whitelist de uma conta com as regras e categorias:
+SELECT mf.mfil_keys, mfc.mfic_name FROM account a INNER JOIN message_filter mf 
+ON a.acco_id = mf.acco_id 
+LEFT JOIN message_filter_category mfc
+ON mf.mfic_id = mfc.mfic_id
+WHERE a.acco_alias LIKE 'assertiva.rest'
+AND mf.mfil_black_white = 1;
